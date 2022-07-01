@@ -1,0 +1,199 @@
+﻿
+<style>
+    .error {
+        color: #ff0000;
+        border-color: #ff0000;
+    }
+</style>
+
+@{
+    ViewBag.Title = "Trackback";
+}
+
+<div class="form-inline">
+    <h2>@ViewBag.Title</h2>
+    <button class="btn btn-light m-2" data-toggle="collapse" data-target="#advanceSearch"><i class="fa fa-cog mb-2 mb-md-2"></i> Config</button>
+</div>
+<h5 id="lblSubTitle"></h5>
+<form id="advanceSearch" class="collapse m-3">
+    <div class="form-inline">
+        Factory <div style="width:5px"></div>
+        <div class="dropdown hierarchy-select" id="ddlFactory">
+            <button type="button" class="btn btn-outline-dark dropdown-toggle"
+                    id="ddlFactory-two-button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false"></button>
+            <div class="dropdown-menu" aria-labelledby="ddlFactory-two-button">
+                <div class="hs-searchbox">
+                    <input type="text" class="form-control w-100" autocomplete="off">
+                </div>
+                <div class="hs-menu-inner">
+                    <a class="dropdown-item" data-value="" data-default-selected="" href="#">All Factory</a>
+                    <a class="dropdown-item" data-value="EVSBG" href="#">DET1</a>
+                    <a class="dropdown-item" data-value="PCBU" href="#">DET4</a>
+                </div>
+            </div>
+            <input class="d-none" id="ddlFactory_two" name="ddlFactory_two" readonly="readonly" aria-hidden="true" type="text" />
+        </div>
+        <div style="width:5px"></div>
+        Test Result <div style="width:5px"></div>
+        <div class="dropdown hierarchy-select" id="ddlTestResult">
+            <button type="button" class="btn btn-outline-dark dropdown-toggle"
+                    id="ddlTestResult-two-button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false"></button>
+            <div class="dropdown-menu" aria-labelledby="ddlTestResult-two-button">
+                <div class="hs-searchbox">
+                    <input type="text" class="form-control w-100" autocomplete="off">
+                </div>
+                <div class="hs-menu-inner">
+                    <a class="dropdown-item" data-value="" data-default-selected="" href="#">All Result</a>
+                    <a class="dropdown-item" data-value="Normal" href="#">Normal</a>
+                    <a class="dropdown-item" data-value="Abnormal" href="#">Abnormal</a>
+                </div>
+            </div>
+            <input class="d-none" id="ddlTestResult_two" name="ddlFactory_two" readonly="readonly" aria-hidden="true" type="text" />
+        </div>
+        <div class="m-2">From</div>
+        <input type="text" class="form-control m-2" name="dateFrom" id="dateFrom" />
+        <div class="m-2">To</div>
+        <input type="text" class="form-control m-2" name="dateTo" id="dateTo" />
+        <button type="submit" class="btn btn-outline-dark" id="btnAdvanceSearch"><i class="fa fa-search mb-2 mb-md-2"></i> Search</button>
+    </div>
+</form>
+
+<div class="card shadow mt-3">
+    <div class="card-body">
+        <table id="table"
+               data-show-export="true"
+               data-toggle="table"
+               data-ajax="setTableByCondition"
+               data-mobile-responsive="true"
+               data-search="true"
+               data-pagination="true"
+               data-page-list="[10, 25, 50, 100, all]">
+            <thead>
+                <tr>
+                    <th colspan="2" data-halign="center">Location</th>
+                    <th colspan="6" data-halign="center">Test</th>
+                </tr>
+                <tr>
+                    <th data-field="factory" data-sortable="true" data-halign="center" data-align="center">Factory</th>
+                    <th data-field="line" data-sortable="true" data-halign="center" data-align="center">Line</th>
+                    <th data-field="function_name" data-sortable="true" data-halign="center" data-align="left">Function</th>
+                    <th data-field="test_result" data-sortable="true" data-halign="center" data-valign="middle" data-align="center">Result</th>
+                    <th data-field="error_detail" data-sortable="true" data-halign="center" data-align="left">Problem</th>
+                    <th data-field="description" data-sortable="true" data-halign="center" data-valign="middle" data-align="left">Description</th>
+                    <th data-field="total_time" data-sortable="true" data-halign="center" data-align="right">Total Response Time(s)</th>
+                    <th data-field="start_date" data-sortable="true" data-halign="center" data-align="center">When</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+
+<script src="~/MyAssets/MyJS.js"></script>
+<script>
+
+    function setAdvanceSearchBox() {
+        $('#ddlFactory').hierarchySelect({
+            hierarchy: false,
+            width: 'auto'
+        });
+
+        $('#ddlTestResult').hierarchySelect({
+            hierarchy: false,
+            width: 'auto'
+        });
+
+        $('#dateTo').datepicker({ dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, gotoCurrent: true });
+        $('#dateFrom').datepicker({ dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, gotoCurrent: true })
+
+        let date = new Date();
+        $("#dateTo").datepicker("setDate", moment(date).format('YYYY-MM-DD'));
+        date.setDate(date.getDate() - 7);
+        $("#dateFrom").datepicker("setDate", moment(date).format('YYYY-MM-DD'));
+    }
+
+    function setTableByCondition(params) {
+
+        let dateFrom = "";
+        let dateTo = "";
+        let factory = "";
+        let test_result = "";
+
+        if ($("#dateFrom").val() == "" || $("#dateFrom").val() == null) {
+            let date = new Date();
+            dateTo = moment(date).format('YYYY-MM-DD');
+            date.setDate(date.getDate() - 7);
+            dateFrom = moment(date).format('YYYY-MM-DD');
+            factory = "";
+            test_result = "";
+        } else {
+            dateFrom = $("#dateFrom").val();
+            dateTo = $("#dateTo").val();
+            factory = $('#ddlFactory_two').val();
+            test_result = $('#ddlTestResult_two').val();
+        }
+
+        $("#lblSubTitle").text("Search results between " + dateFrom + " and " + dateTo + " ");
+        let apiToken = $.cookie('meslogtdconline_cookie')
+        let url = apiUrl + "api/tdconline?" + "datefrom=" + dateFrom + "&dateTo=" + dateTo + "&factory=" + factory + "&test_result=" + test_result;
+        $.ajax({
+            type: "GET",
+            beforeSend: function (request) {
+                request.setRequestHeader("apikey", apiToken);
+            },
+            url: url,
+            success: function (response) {
+                if ($("#dateFrom").val() == "" || $("#dateFrom").val() == null) {
+                    $("#table").bootstrapTable('refresh', {
+                        url: response
+                    })
+                } else {
+                    params.success(response);
+                }
+            },
+            error: function (response) {
+                setAlert(response["responseJSON"], "error");
+                $("#table").bootstrapTable('removeAll');
+            }
+        });
+    }
+
+
+    //--------- Event ----------
+    $.validator.addMethod('date_from_to', function (value, element, param) {
+        let dateTo = Date.parse(value);
+        let dateFrom = Date.parse($(param).val());
+        return this.optional(element) || dateFrom <= dateTo;
+    }, 'Invalid value');
+
+    $(document).ready(function () {
+        setCookie();
+        setAdvanceSearchBox();
+    });
+
+    $('#advanceSearch').validate({
+        rules: {
+            "dateFrom": {
+                required: true
+            },
+            "dateTo": {
+                required: true,
+                date_from_to: "#dateFrom"
+            }
+        },
+        messages: {
+            "dateFrom": {
+                required: "Required"
+            },
+            "dateTo": {
+                required: "Required",
+                date_from_to: "The start date must be less than the end date"
+            }
+        },
+        submitHandler: function (form) {
+            $("#table").bootstrapTable('refresh')
+        }
+    });
+
+</script>

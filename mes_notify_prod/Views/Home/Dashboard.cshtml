@@ -1,0 +1,293 @@
+﻿
+<style>
+    .error {
+        color: #ff0000;
+        border-color: #ff0000;
+    }
+</style>
+
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+<div class="form-inline">
+    <h2>@ViewBag.Title</h2>
+    <button class="btn btn-light m-2" data-toggle="collapse" data-target="#advanceSearch"><i class="fa fa-cog mb-2 mb-md-2"></i> Config</button>
+</div>
+<h5 id="lblSubTitle"></h5>
+<form id="advanceSearch" class="collapse m-3">
+    <div class="form-inline">
+        <div class="m-2">From</div>
+        <input type="text" class="form-control m-2" name="dateFrom" id="dateFrom" />
+        <div class="m-2">To</div>
+        <input type="text" class="form-control m-2" name="dateTo" id="dateTo" />
+        <button type="submit" class="btn btn-outline-dark" id="btnAdvanceSearch"><i class="fa fa-search mb-2 mb-md-2"></i> Search</button>
+    </div>
+</form>
+
+<div class="card-deck mt-4">
+    <div class="card shadow">
+        <div class="card-body">
+            <h5 class="card-title">DET1</h5>
+            <h6 class="card-subtitle mb-2 text-muted">EVSBG</h6>
+            <hr />
+            <div id="pieChart_EVSBG"></div>
+            <h6>TDC Online</h6>
+            <p id="lblTDCOnlineLastResult_EVSBG"></p>
+            <table id="tblTDCOnline_EVSBG"
+                   data-toggle="table"
+                   data-mobile-responsive="true">
+                <thead>
+                    <tr>
+                        <th rowspan="2" data-field="test_result" data-width="100" data-sortable="true" data-halign="center" data-align="center">Result</th>
+                        <th rowspan="2" data-field="times" data-sortable="true" data-halign="center" data-align="right">Times</th>
+                        <th colspan="3" data-halign="center">Response Time(s)</th>
+                    </tr>
+                    <tr>
+                        <th data-field="max_response" data-sortable="true" data-halign="center" data-align="right">Max</th>
+                        <th data-field="avg_response" data-sortable="true" data-halign="center" data-align="right">Average</th>
+                        <th data-field="min_response" data-sortable="true" data-halign="center" data-align="right">Min</th>
+                    </tr>
+                </thead>
+            </table>
+            <h6 class="mt-3">Network</h6>
+            <p id="lblPingLastResult_EVSBG"></p>
+            <table id="tblPingResult_EVSBG"
+                   data-toggle="table"
+                   data-mobile-responsive="true">
+                <thead>
+                    <tr>
+                        <th colspan="3" data-halign="left">Ping Result</th>
+                    </tr>
+                    <tr>
+                        <th data-field="test_result" data-width="100" data-sortable="true" data-halign="center" data-align="center">Result</th>
+                        <th data-field="ping_status" data-sortable="true" data-halign="center" data-align="center">Ping</th>
+                        <th data-field="times" data-sortable="true" data-halign="center" data-align="right">Times</th>
+                    </tr>
+                </thead>
+            </table>
+            <table id="tblPing_EVSBG"
+                   data-toggle="table"
+                   data-mobile-responsive="true">
+                <thead>
+                    <tr>
+                        <th colspan="3" data-halign="left">Ping RoundTrip Time(ms)</th>
+                    </tr>
+                    <tr>
+                        <th data-field="max_response" data-sortable="true" data-halign="center" data-align="right">Max</th>
+                        <th data-field="avg_response" data-sortable="true" data-halign="center" data-align="right">Average</th>
+                        <th data-field="min_response" data-sortable="true" data-halign="center" data-align="right">Min</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <h5 class="card-title">DET4</h5>
+            <h6 class="card-subtitle mb-2 text-muted">PCBU</h6>
+            <hr />
+            <div id="pieChart_PCBU"></div>
+            <h6>TDC Online</h6>
+            <p id="lblTDCOnlineLastResult_PCBU"></p>
+            <table id="tblTDCOnline_PCBU"
+                   data-toggle="table"
+                   data-mobile-responsive="true">
+                <thead>
+                    <tr>
+                        <th rowspan="2" data-width="100"  data-field="test_result" data-sortable="true" data-halign="center" data-align="center">Result</th>
+                        <th rowspan="2" data-field="times" data-sortable="true" data-halign="center" data-align="right">Times</th>
+                        <th colspan="3" data-halign="center">Response Time(s)</th>
+                    </tr>
+                    <tr>
+                        <th data-field="max_response" data-sortable="true" data-halign="center" data-align="right">Max</th>
+                        <th data-field="avg_response" data-sortable="true" data-halign="center" data-align="right">Average</th>
+                        <th data-field="min_response" data-sortable="true" data-halign="center" data-align="right">Min</th>
+                    </tr>
+                </thead>
+            </table>
+            <h6 class="mt-3">Network</h6>
+            <p id="lblPingLastResult_PCBU"></p>
+            <table id="tblPingResult_PCBU"
+                   data-toggle="table"
+                   data-mobile-responsive="true">
+                <thead>
+                    <tr>
+                        <th colspan="3" data-halign="left">Ping Result</th>
+                    </tr>
+                    <tr>
+                        <th data-field="test_result" data-width="100" data-sortable="true" data-halign="center" data-align="center">Result</th>
+                        <th data-field="ping_status" data-sortable="true" data-halign="center" data-align="center">Ping</th>
+                        <th data-field="times" data-sortable="true" data-halign="center" data-align="right">Times</th>
+                    </tr>
+                </thead>
+            </table>
+            <table id="tblPing_PCBU"
+                   data-toggle="table"
+                   data-mobile-responsive="true">
+                <thead>
+                    <tr>
+                        <th colspan="3" data-halign="left">Ping RoundTrip Time(ms)</th>
+                    </tr>
+                    <tr>
+                        <th data-field="max_response" data-sortable="true" data-halign="center" data-align="right">Max</th>
+                        <th data-field="avg_response" data-sortable="true" data-halign="center" data-align="right">Average</th>
+                        <th data-field="min_response" data-sortable="true" data-halign="center" data-align="right">Min</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/MyAssets/MyJS.js"></script>
+<script>
+
+    function setPieChart(factory, data) {
+        Highcharts.chart("pieChart_" + factory, {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie',
+                height: '300px'
+            },
+            colors: ['#f2ccc3', '#e78f8e',
+                '#ffe6e8', '#acd8aa', '#f48498'],
+            title: {
+                text: 'Problem Summary (Times)'
+            },
+            credits: {
+                enabled: false
+            },
+            tooltip: {
+                pointFormat: '{series.name}, <b>{point.y} Times, {point.percentage:.1f} %</b>'
+            },
+            accessibility: {
+                point: {
+                    valueSuffix: '%'
+                }
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>,{point.y} Times, {point.percentage:.1f} %'
+                    }
+                }
+            },
+            series: [{
+                name: 'Problem',
+                colorByPoint: true,
+                data: data
+            }]
+        });
+    }
+
+    function setFactory(dateFrom, dateTo, factory) {
+        let apiToken = $.cookie('meslogtdconline_cookie')
+        let url = apiUrl + "api/tdconline?" + "datefrom=" + dateFrom + "&dateTo=" + dateTo + "&summary=" + factory;
+        $.ajax({
+            type: "GET",
+            beforeSend: function (request) {
+                request.setRequestHeader("apikey", apiToken);
+            },
+            url: url,
+            success: function (response) {
+                $("#tblTDCOnline_" + factory).bootstrapTable('destroy').bootstrapTable({
+                    data: response["retTDCOnline"]
+                });
+
+                $("#tblPing_" + factory).bootstrapTable('destroy').bootstrapTable({
+                    data: response["retPing"]
+                });
+
+                $("#tblPingResult_" + factory).bootstrapTable('destroy').bootstrapTable({
+                    data: response["retPingResult"]
+                });
+
+                setPieChart(factory, response["retSummary"]);
+
+                $("#lblTDCOnlineLastResult_" + factory).html(response["lastTDCOnline"]);
+                $("#lblPingLastResult_" + factory).html(response["lastPing"]);
+            },
+            error: function (response) {
+                $("#tblTDCOnline_" + factory).bootstrapTable('destroy').bootstrapTable({
+                    data: response["retTDCOnline"]
+                });
+
+                $("#tblPing_" + factory).bootstrapTable('destroy').bootstrapTable({
+                    data: response["retPing"]
+                });
+
+                setPieChart(factory, response["retSummary"]);
+
+                $("#lblTDCOnlineLastResult_" + factory).html(response["lastTDCOnline"]);
+                $("#lblPingLastResult_" + factory).html(response["lastPing"]);
+            }
+        });
+    }
+
+    function setAdvanceSearchBox() {
+        $('#dateTo').datepicker({ dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, gotoCurrent: true });
+        $('#dateFrom').datepicker({ dateFormat: 'yy-mm-dd', changeMonth: true, changeYear: true, gotoCurrent: true })
+
+        let date = new Date();
+        $("#dateTo").datepicker("setDate", moment(date).format('YYYY-MM-DD'));
+        date.setDate(date.getDate() - 7);
+        $("#dateFrom").datepicker("setDate", moment(date).format('YYYY-MM-DD'));
+    }
+
+    function setPage() {
+        let dateFrom = $("#dateFrom").val();
+        let dateTo = $("#dateTo").val();
+
+        $("#lblSubTitle").text("Search results between " + dateFrom + " and " + dateTo + " ");
+        setFactory(dateFrom, dateTo, 'EVSBG');
+        setFactory(dateFrom, dateTo, 'PCBU');
+    }
+
+    //---------Event-----------
+
+    $.validator.addMethod('date_from_to', function (value, element, param) {
+        let dateTo = Date.parse(value);
+        let dateFrom = Date.parse($(param).val());
+        return this.optional(element) || dateFrom <= dateTo;
+    }, 'Invalid value');
+
+    $(document).ready(function () {
+        setCookie();
+        setAdvanceSearchBox();
+        setPage();
+    });
+
+    $('#advanceSearch').validate({
+        rules: {
+            "dateFrom": {
+                required: true
+            },
+            "dateTo": {
+                required: true,
+                date_from_to: "#dateFrom"
+            }
+        },
+        messages: {
+            "dateFrom": {
+                required: "Required"
+            },
+            "dateTo": {
+                required: "Required",
+                date_from_to: "The start date must be less than the end date"
+            }
+        },
+        submitHandler: function (form) {
+            setCookie();
+            setPage();
+        }
+    });
+
+</script>

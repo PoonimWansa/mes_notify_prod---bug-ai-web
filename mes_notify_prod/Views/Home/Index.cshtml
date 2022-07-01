@@ -1,0 +1,45 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+
+<div class="jumbotron">
+    <h1>Index</h1>
+</div>
+
+<button class="btn btn-outline-info" id="btnCookie" name="btnCookie">cookie</button>
+<input id="txtToken" />
+<script>
+
+    const apiUrl = 'https://localhost:44357/';
+
+    setTableByCondition = () => {
+        let url = apiUrl + "api/tdconline";
+        $.ajax({
+            type: "POST",
+            data: {
+                id: '1234',
+                function_name: 'fn_test',
+                total_time: '2',
+                start_date: '',
+                error_detail: 'err',
+                line: 'l',
+                factory: 'f',
+                sender: 's'
+            },
+            url: url,
+            success: function (response) {
+                alert(response["responseJSON"])
+            },
+            error: function (response) {
+                alert(response["responseJSON"])
+            }
+        });
+    }
+
+    $("#btnCookie").click(() => {
+        setTableByCondition()
+    })
+</script>
+

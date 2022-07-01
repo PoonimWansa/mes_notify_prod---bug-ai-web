@@ -1,0 +1,184 @@
+﻿<style>
+    .error {
+        color: #ff0000;
+        border-color: #ff0000;
+    }
+</style>
+
+@{
+    ViewBag.Title = "Training";
+}
+
+<h2>Training</h2>
+
+<form id="frmData" class="card">
+    <div class="card-body">
+        <div class="form-inline">
+            ID<div style="width:5px"></div><input type="text" class="form-control" id="txtID" name="txtID" readonly />
+            <div style="width:5px"></div>
+            Name<div style="width:5px"></div><input type="text" class="form-control" id="txtName" name="txtName" /><div style="width:5px"></div>
+            Create date<div style="width:5px"></div><input type="date" class="form-control" id="txtCDate" name="txtCDate" />
+        </div>
+    </div>
+    <div class="card-footer">
+        <button class="btn btn-outline-success">Save</button>
+        <a class="btn btn-outline-dark" id="btnClear" name="btnClear">Clear</a>
+    </div>
+</form>
+
+<table id="tblTraining"
+       data-show-export="true"
+       data-toggle="table"
+       data-mobile-responsive="true"
+       data-search="true"
+       data-pagination="true"
+       data-page-list="[10, 25, 50, 100, all]">
+    <thead>
+        <tr>
+            <th data-field="operate" data-formatter="operateFormatter" data-events="operateEvents">Action</th>
+            <th data-field="id" data-sortable="true" data-halign="center" data-align="center">ID</th>
+            <th data-field="name" data-sortable="true" data-halign="center" data-align="center">Name</th>
+            <th data-field="cdate" data-sortable="true" data-halign="center" data-align="right">Create Date</th>
+        </tr>
+    </thead>
+</table>
+
+<script>
+
+    const apiUrl = '//localhost:44357/';
+    /*    const apiUrl = 'http://thbpoprodap-mes.delta.corp/mes_notify_prod/';*/
+
+    setAlert = (msg, type) => {
+        notif({
+            msg: msg,
+            type: type,
+            opacity: 0.8
+        });
+    }
+
+    operateFormatter = (value, row, index) => {
+        return [
+            '<a class="tblTraining_edit" href="javascript:void(0)" title="Edit">',
+            'Edit',
+            '</a>  ',
+            '<a class="tblTraining_remove" href="javascript:void(0)" title="Remove">',
+            'Remove',
+            '</a>'
+        ].join('')
+    }
+
+    window.operateEvents = {
+        'click .tblTraining_edit': function (e, value, row, index) {
+            $("#txtID").val(row["id"]);
+            $("#txtName").val(row["name"]);
+            $("#txtCDate").val(row["cdate"]);
+        },
+        'click .tblTraining_remove': function (e, value, row, index) {
+            alert('You click remove action, row: ' + JSON.stringify(row))
+
+
+        }
+    }
+
+    clearFormData = () => {
+        $("#txtID").val("");
+        $("#txtName").val("");
+        $("#txtCDate").val("");
+    }
+
+    setCookie = () => {
+        $.cookie('meslogtdconline_cookie', 'seaitmes', { expires: 7 });
+    }
+
+    setAlert = (msg, type) => {
+        notif({
+            msg: msg,
+            type: type,
+            opacity: 0.8
+        });
+    }
+
+    setTable = () => {
+        let apiToken = $.cookie('meslogtdconline_cookie')
+        $.ajax({
+            type: "GET",
+            beforeSend: function (request) {
+                request.setRequestHeader("apikey", apiToken);
+            },
+            url: apiUrl + "api/training",
+            success: function (response) {
+                setAlert("Success", "success")
+                $("#tblTraining").bootstrapTable('destroy').bootstrapTable({
+                    data: response
+                })
+            },
+            error: function (response) {
+                setAlert(response["responseText"], "error")
+                $("#tblTraining").bootstrapTable('destroy').bootstrapTable()
+            }
+        });
+    }
+
+    //Event
+    $(document).ready(function () {
+        setTable();
+    });
+
+    $("#btnClear").click(function () {
+        clearFormData();
+    })
+
+    $('#frmData').validate({
+        rules: {
+            "txtName": {
+                required: true,
+                minlength: 5
+            },
+            "txtCDate": {
+                required: true
+            }
+        },
+        messages: {
+            "txtName": {
+                required: "Required",
+                minlength: "At least {0} characters"
+            },
+            "txtCDate": {
+                required: "Required"
+            }
+        },
+        submitHandler: function (form) {
+            let apiToken = $.cookie('meslogtdconline_cookie')
+            let id = $("#txtID").val();
+            let name = $("#txtName").val();
+            let cdate = $("#txtCDate").val();
+            let type = "";
+            if (id != "") {
+                type = "PUT";
+            } else {
+                type = "POST";
+            }
+
+            $.ajax({
+                type: type,
+                beforeSend: function (request) {
+                    request.setRequestHeader("apikey", apiToken);
+                },
+                url: apiUrl + "api/training",
+                data: {
+                    id: id,
+                    name: name,
+                    cdate: cdate
+                },
+                success: function (response) {
+                    setAlert("Success", "success");
+                    setTable();
+                    $("#txtID").val(response["id"]);
+                },
+                error: function (response) {
+                    setAlert(response["responseText"], "error")
+                }
+            });
+        }
+    });
+</script>
